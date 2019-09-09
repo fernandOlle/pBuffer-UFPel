@@ -3,55 +3,59 @@
 #include <string.h>
 
 typedef struct agenda {
-    char nome[80];
+    char nome[20];
     int cpf;
 } Agenda;
 
 void * pBuffer;
+int * op, * lacos, * nDePessoas;
 
 void menu ( );
-void sair ( void * pBuffer );
-void apagar ( void * pBuffer );
-void buscar ( void * pBuffer );
-void inserir ( void * pBuffer, int * nDePessoas );
-void imprimir ( void * pBuffer );
-void retornar ( int ** op, int ** laco, int ** nDePessoas );
+void sair ( );
+void apagar ( );
+void buscar ( );
+void inserir ( int ** nDePessoas );
+void imprimir ( );
+void retornar ( int ** op, int ** lacos, int ** nDePessoas );
 
 int main ( ) {
-    int * op, * laco, * nDePessoas;
-    pBuffer = malloc ( sizeof ( int ) * 2 );
+    pBuffer = malloc ( sizeof ( int ) * 3 + sizeof ( Agenda ));
     op = pBuffer + 0;
     nDePessoas = pBuffer +  2 * sizeof ( int );
     * nDePessoas = 1;
+    printf("%d\n", *nDePessoas);
+    printf("%p\n", pBuffer);
+    ( * nDePessoas ) ++;
+
+    printf("%d\n", *nDePessoas);
 
     while ( 2879 ) {
         menu ( );
         scanf ( "%d", op ); 
+        
         switch ( * op ) {
         case 1 :
             getchar ( );
-            inserir ( pBuffer, nDePessoas );
-            retornar ( & op, & laco, & nDePessoas );
-            ( * nDePessoas ) ++;
+            inserir ( &nDePessoas );
             printf ( "\n" );
             break;
         case 2 :
             getchar ( );
-            imprimir ( pBuffer );
+            imprimir ( );
             printf ( "\n" );
             break;
         case 3 :
             getchar ( );
-            apagar ( pBuffer );
+            apagar ( );
             printf ( "\n" );
             break;
         case 4 :
             getchar ( );
-            buscar ( pBuffer );
+            buscar ( );
             printf ( "\n" );
             break;
         case 5 :
-            sair ( pBuffer );
+            sair ( );
             return 0;
 
         default:
@@ -68,35 +72,36 @@ void menu ( ) {
     printf ( "\t5 -- Sair \n" );
     printf ( "------> ");
 }
-void sair ( void * pBuffer ) {
+void sair ( ) {
 	free ( pBuffer );
 }
-void apagar ( void * pBuffer ) {
+void apagar ( ) {
     
 }
-void buscar ( void * pBuffer ) {
+void buscar ( ) {
     
 }
-void inserir ( void * pBuffer, int * nDePessoas ) {
-    pBuffer = realloc ( pBuffer, ( 3 * sizeof ( int ) ) + ( * nDePessoas ) * sizeof ( Agenda ));
-    // pBuffer = realloc(pBuffer,  3*(sizeof(int)) + ((sizeof(Agenda)) * ((*(int *)pBuffer) + 1)));
-    
+void inserir ( int ** nDePessoas ) {
+    pBuffer = realloc ( pBuffer, ( 3 * sizeof ( int ) ) + ( ** nDePessoas ) * sizeof ( Agenda ));
+    retornar ( & op, & lacos, nDePessoas );
+
     printf("%d\n",sizeof(pBuffer));
 
-    // Agenda * nova = pBuffer;
-    
-    // printf ( "\tEntre nome : " );
-    // fgets ( nova-> nome, 80, stdin );
 
-    // printf ( "\tEntre o CPF : ");
-    // scanf ( "%d", & nova-> nDePessoas );
-}
-void imprimir ( void * pBuffer ) {
+    Agenda * nova = pBuffer + ( 3 * sizeof ( int ) ) + ( ** nDePessoas ) * sizeof ( Agenda );
+    fgets ( nova-> nome, 80, stdin );
+    printf ( "\tEntre o CPF : ");
+    scanf ( "%d", & nova-> cpf );
     
-}   
-void retornar ( int ** op, int ** laco, int ** nDePessoas ) { 
+    printf ( "%d", ** nDePessoas );
+}
+void imprimir ( ) {
+    // printf ( "\tEntre nome : " );
+    
+}
+void retornar ( int ** op, int ** lacos, int ** nDePessoas ) { 
     * op = pBuffer + 0;
-    * laco = pBuffer + sizeof ( int );
+    * lacos = pBuffer + sizeof ( int );
     * nDePessoas = pBuffer +  2 * sizeof ( int );
-    ** nDePessoas = 1;
+    ( ** nDePessoas ) ++;
 }
